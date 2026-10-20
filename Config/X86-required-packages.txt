@@ -71,7 +71,7 @@ xray-core
 sing-box
 chinadns-ng
 dnsmasq-full
-nftables
+nftables-json
 kmod-nft-socket
 kmod-nft-tproxy
 kmod-nft-nat
