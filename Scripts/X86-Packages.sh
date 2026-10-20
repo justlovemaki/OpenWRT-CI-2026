@@ -40,3 +40,7 @@ test -f "$work/docker/collections/luci-lib-docker/Makefile"
 find package/feeds -type l -name luci-lib-docker -delete
 rm -rf package/luci-lib-docker
 cp -a "$work/docker/collections/luci-lib-docker" package/luci-lib-docker
+
+# Legacy upstream uses a tag-style version; APK requires a numeric version.
+# Scope this normalization to luci-lib-docker, leaving other packages untouched.
+sed -i -E 's/^(PKG_VERSION:=)v([0-9])/\1\2/' package/luci-lib-docker/Makefile
