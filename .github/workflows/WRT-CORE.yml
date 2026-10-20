@@ -171,6 +171,9 @@ jobs:
 
           $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Handles.sh
+          if [[ "${WRT_CONFIG^^}" == "X86" ]]; then
+            bash "$GITHUB_WORKSPACE/Scripts/X86-Packages.sh"
+          fi
 
       - name: Custom Settings
         run: |
@@ -184,7 +187,11 @@ jobs:
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
-          make defconfig -j$(nproc) && make clean -j$(nproc)
+          make defconfig -j$(nproc)
+          if [[ "${WRT_CONFIG^^}" == "X86" ]]; then
+            bash "$GITHUB_WORKSPACE/Scripts/Verify-X86-Packages.sh" config .config
+          fi
+          make clean -j$(nproc)
 
       - name: Download Packages
         if: ${{ !inputs.WRT_TEST }}
@@ -199,6 +206,11 @@ jobs:
           cd ./wrt/
 
           make -j$(nproc) || make -j1 V=s
+
+      - name: Verify X86 Firmware Packages
+        if: ${{ !inputs.WRT_TEST && inputs.WRT_CONFIG == 'X86' }}
+        run: |
+          bash "$GITHUB_WORKSPACE/Scripts/Verify-X86-Packages.sh" manifest "$GITHUB_WORKSPACE/wrt/bin/targets"
 
       - name: Save Build Cache
         if: ${{ !inputs.WRT_TEST && success() && steps.cache-restore.outputs.cache-hit != 'true' }}
@@ -313,3 +325,4 @@ jobs:
               gh cache delete "$CACHE_ID" --repo "$GH_REPO" ||
                 echo "warning: failed to delete cache $CACHE_ID ($CACHE_KEY)"
             done
+

@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: MIT
 # Copyright (C) 2026 VIKINGYFY
 
+# X86 uses the requested Argon theme; other targets retain their defaults.
+if [[ "${WRT_CONFIG^^}" == "X86" ]]; then
+  export WRT_THEME=argon
+fi
+
 #移除luci-app-attendedsysupgrade
 find ./feeds/luci/collections/ -type f -name "Makefile" -exec sed -i "/attendedsysupgrade/d" {} +
 #修改默认主题
@@ -51,3 +56,4 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 		echo "qualcommax set up nowifi successfully!"
 	fi
 fi
+
