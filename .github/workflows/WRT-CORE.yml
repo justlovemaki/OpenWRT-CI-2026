@@ -62,6 +62,7 @@ env:
 
 jobs:
   core:
+    if: ${{ inputs.WRT_CONFIG == 'X86' }}
     name: ${{inputs.WRT_SOURCE}}
     runs-on: ubuntu-latest
     outputs:
