@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 # Copyright (C) 2026 VIKINGYFY
 
-# X86 uses the requested Argon theme; other targets retain their defaults.
+# X86 defaults to Aurora; Argon remains available as an installed alternative.
 if [[ "${WRT_CONFIG^^}" == "X86" ]]; then
-  export WRT_THEME=argon
+  export WRT_THEME=aurora
 fi
 
 #移除luci-app-attendedsysupgrade
@@ -57,3 +57,15 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 	fi
 fi
 
+
+# Select Aurora after package theme defaults when building the X86 image.
+if [[ "${WRT_CONFIG^^}" == "X86" ]]; then
+  mkdir -p files/etc/uci-defaults
+  cat > files/etc/uci-defaults/99-x86-default-theme <<'EOF'
+#!/bin/sh
+uci -q set luci.main.mediaurlbase='/luci-static/aurora'
+uci -q commit luci
+exit 0
+EOF
+  chmod 0755 files/etc/uci-defaults/99-x86-default-theme
+fi
