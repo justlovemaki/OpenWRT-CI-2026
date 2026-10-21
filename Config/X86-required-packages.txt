@@ -75,3 +75,5 @@ nftables-json
 kmod-nft-socket
 kmod-nft-tproxy
 kmod-nft-nat
+kmod-fs-ntfs3
+ntfs3-mount
